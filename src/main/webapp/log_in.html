@@ -1,103 +1,19 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+<title>云笔记——登录</title>
+<meta charset="utf-8">
 <link rel="stylesheet" href="styles/login.css"/>
 <script type="text/javascript" src="scripts/jquery.min.js"></script>
+<script type="text/javascript" src="scripts/cookie_util.js"></script>
+<script type="text/javascript" src="scripts/login.js"></script>
 <script type="text/javascript">
-	$(function(){
-		$("#login").click(function(){
-			//清空消息
-			$("#count_span").html("");
-			$("#password_span").html("");
-			//获取数据
-			var name = $("#count").val();
-			var pwd = $("#password").val();
-			//检查数据
-			var flag = true;
-			if(name==""){
-				flag = false;
-				$("#count_span").html("请填写用户名").css("color","red");
-			}
-			if(pwd==""){
-				flag = false;
-				$("#password_span").html("请填写密码").css("color","red");
-			}
-			//ajax提交数据
-			if(flag){
-				$.ajax({
-					url:"user/login.do",
-					type:"post",
-					data:{"name":name,"password":pwd},
-					dataType:"json",
-					success:function(data){
-						if(data.status=="1"){
-							$("#count_span").html(data.msg).css("color","red");
-						}
-						if(data.status=="2"){
-							$("#password_span").html(data.msg).css("color","red");
-						}
-						if(data.status=="0"){
-							location.href = "edit.html";
-						}
-					},
-					error:function(){
-						$("#count_span").html("服务器未响应").css("color","red");
-					}
-				});
-			}
-		});
-		//注册
-		$("#regist_button").click(function(){
-			//获取数据
-			var regist_username = $("#regist_username").val();
-			var nickname = $("#nickname").val();
-			var regist_password = $("#regist_password").val();
-			var final_password = $("#final_password").val();
-			
-			var flag1 = true;
-			//验证用户名
-			$.ajax({
-				url:"user/check.do",
-				type:"post",
-				data:{"name":regist_username},
-				dataType:"json",
-				success:function(data){
-					console.log(data.status);
-					if(data.status==1){
-						$("#warning_1").show();
-						flag1 = false;
-					}
-					console.log(flag);
-				},
-				error:function(){
-					alert("服务器未响应");
-				}
-			});
-			//验证密码
-			if(regist_password.length<6 && regist_password==final_password){
-				flag1=false;
-			}
-			//ajax提交
-			if(flag1){
-				$.ajax({
-					url:"user/sgin_up.do",
-					type:"post",
-					data:{"name":regist_username,"password":regist_password,"nickname":nickname},
-					dataType:"json",
-					success:function(data){
-						location.reload="log_in.html";
-						$("#count_span").html(data.msg).css("color","red");
-						$("#count").val(regist_username);
-					},
-					error:function(){
-						alert("服务器未响应");
-					}
-				});			
-			}
-		});
-		
-		
-	});
+$(function(){
+	//登录按钮处理
+	$("#login").click(login);
+	//注册按钮处理
+	$("#regist_button").click(sign);
+});
 </script>
 </head>
 	<body>

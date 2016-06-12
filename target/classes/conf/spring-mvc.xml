@@ -19,9 +19,10 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
-		
-	<!-- Connection等控制器扫描 -->	
-	<context:component-scan base-package="club.nextcoder.yunnote"/>
-	<!-- mvc扫描 -->
-	<mvc:annotation-driven/>	
+	
+	<!-- hanlderMapping -->
+	<mvc:annotation-driven/>
+	<!-- 扫描Controller和Service组件对象 -->
+	<context:component-scan base-package="org.tedu.cloudnote"/>
+	
 </beans>

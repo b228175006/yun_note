@@ -7,56 +7,40 @@ import javax.sql.DataSource;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import club.nextcoder.yunnote.dao.UserDao;
-import club.nextcoder.yunnote.entity.User;
-import club.nextcoder.yunnote.service.UserService;
-import club.nextcoder.yunnote.util.NoteResult;
+import org.tedu.cloudnote.dao.UserDao;
+import org.tedu.cloudnote.entity.User;
+import org.tedu.cloudnote.service.UserService;
+import org.tedu.cloudnote.util.NoteResult;
 
 public class TestUserDao {
+	
 	/**
-	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * ²âÊÔDBCP
+	 * @throws SQLException 
 	 */
 	@Test
-	public void test(){
+	public void test() throws SQLException{
 		ApplicationContext ac = new ClassPathXmlApplicationContext("conf/spring-mybatis.xml");
 		DataSource ds = ac.getBean("dbcp",DataSource.class);
-		try {
-			System.out.println(ds.getConnection());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		System.out.println(ds.getConnection());
 	}
-	@Test //ï¿½ï¿½ï¿½ï¿½UserDaoï¿½ï¿½findByName
-	public void test2(){
+	/**
+	 * ²âÊÔDao
+	 * @throws SQLException 
+	 */
+	@Test
+	public void test1(){
 		ApplicationContext ac = new ClassPathXmlApplicationContext("conf/spring-mybatis.xml");
 		UserDao dao = ac.getBean("userDao",UserDao.class);
-		User user = dao.findByName("demo1");
+		User user = dao.findByName("demo");
 		System.out.println(user);
 	}
-	@Test //ï¿½ï¿½ï¿½ï¿½UserService
-	public void test3(){
-		ApplicationContext ac = new ClassPathXmlApplicationContext("conf/*.xml");
-		UserService us = ac.getBean("userService",UserService.class);
-//		NoteResult result = us.checkLogin("demo1", "c8837b23ff8aaa8a2dde915473ce0991");
-		NoteResult result = us.checkLogin("demo1", "");
+	@Test
+	public void test2(){
+		String[] conf = {"conf/spring-mybatis.xml","conf/spring-mvc.xml"};
+		ApplicationContext ac = new ClassPathXmlApplicationContext(conf);
+		UserService service = ac.getBean("userService",UserService.class);
+		NoteResult result = service.checkLogin("demo", "c8837b23ff8aaa8a2dde915473ce0991");
 		System.out.println(result);
-		
 	}
-	@Test 
-	public void test4(){
-		ApplicationContext ac = new ClassPathXmlApplicationContext("conf/*.xml");
-		UserService us = ac.getBean("userService",UserService.class);
-//		NoteResult result = us.checkLogin("demo1", "c8837b23ff8aaa8a2dde915473ce0991");
-		User user = new User();
-		user.setCn_user_id("1");
-		user.setCn_user_name("test11");
-		user.setCn_user_nick("æ³¨å†Œæµ‹è¯•");
-		user.setCn_user_password("123123");
-		user.setCn_user_token("1");
-		NoteResult result = us.saveUser(user);
-		System.out.println(result);
-		
-	}
-	
 }

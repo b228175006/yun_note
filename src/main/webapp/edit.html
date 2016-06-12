@@ -17,6 +17,88 @@
         <link rel="stylesheet" href="styles/prettify.css"/>
 		<!-- Ueditor编辑器CSS -->
 		<link href="styles/umeditor.min.css" type="text/css" rel="stylesheet">
+		<script type="text/javascript" src="scripts/jquery.min.js"></script>
+		<script type="text/javascript" src="scripts/cookie_util.js"></script>
+		<script type="text/javascript" src="scripts/book.js"></script>
+		<script type="text/javascript">
+			//获取Cookie中的用户ID
+			var userId = getCookie("userId");
+			//alert(userId);
+			if(userId!=null){//用户ID存在
+				$(function(){
+					//发送Ajax请求获取笔记本列表
+					loadUserBooks();
+					//点击笔记本加载笔记列表(动态绑定)
+					//父元素.on(事件类型，子元素选择器，function);
+					$("#books").on("click","li",function(){
+						//获取点击的笔记本的li的Id值
+						var bookId = $(this).data("bookId");
+						//alert(bookId);
+						//发送请求加载笔记
+						$.ajax({
+							url:"http://localhost:8080/cloud_note/note/loadnotes.do",
+							type:"post",
+							data:{"bookId":bookId},
+							dataType:"json",
+							success:function(result){
+								if(result.status==0){//成功
+									var notes = result.data;
+									//清除之前的列表内容
+									$("#notes").empty();
+									//显示选中的笔记本中的笔记列表
+									for(var i=0;i<notes.length;i++){
+										var noteTitle = notes[i].cn_note_title;//笔记标题
+										var noteId = notes[i].cn_note_id;//笔记id
+										var li ='<li class="online">';
+									    li+='	<a>';
+										li+='		<i class="fa fa-file-text-o" title="online" rel="tooltip-bottom"></i>';
+										li+=		noteTitle;
+										li+='		<button type="button" class="btn btn-default btn-xs btn_position btn_slide_down">';
+										li+='			<i class="fa fa-chevron-down"></i>';
+										li+='		</button>';
+										li+='	</a>';
+										li+='	<div class="note_menu" tabindex="-1">';
+										li+='		<dl>';
+										li+='			<dt>';
+										li+='				<button type="button" class="btn btn-default btn-xs btn_move" title="移动至...">';
+										li+='					<i class="fa fa-random"></i>';
+										li+='				</button>';
+										li+='			</dt>';
+										li+='			<dt>'
+										li+='				<button type="button" class="btn btn-default btn-xs btn_share" title="分享">';
+										li+='					<i class="fa fa-sitemap"></i>';
+										li+='				</button>';
+										li+='			</dt>';
+										li+='			<dt>';
+										li+='				<button type="button" class="btn btn-default btn-xs btn_delete" title="删除">';
+										li+='					<i class="fa fa-times"></i>';
+										li+='				</button>';
+										li+='			</dt>';
+										li+='		</dl>';
+										li+='	</div>';
+										li+='</li>';
+										var $li = $(li);
+										//给li元素绑定id值
+										$li.data("noteId",noteId);
+										//添加到笔记列表的ul元素中
+										$("#notes").append($li);
+									}
+								}
+								
+								
+							},
+							error:function(){
+								alert("加载笔记列表失败");
+							}
+						});
+					});
+				});
+			}else{
+				location.href="log_in.html";
+			}
+			
+			
+		</script>
     </head>
     <body class="animated fadeIn">
         <header class="header">
@@ -66,11 +148,11 @@
 					<div class="module" data-toggle="niceScroll">
 						<div class="chat-contact">
 							<div class="contact-body">
-								<ul class="contacts-list">
-									<li class="online">
+								<ul class="contacts-list" id="books">
+									<!--  <li class="online">
 									<a  class='checked'>
 									<i class="fa fa-book" title="online" rel="tooltip-bottom">
-									</i> 默认笔记本</a></li>
+									</i> 默认笔记本</a></li> -->
 								</ul>
 							</div>
 						</div>
@@ -93,7 +175,8 @@
 					<div class="module" data-toggle="niceScroll">
 						<div class="chat-contact">
 							<div class="contact-body">
-								<ul class="contacts-list">
+								<ul class="contacts-list" id="notes">
+								<!--  
 									<li class="online">
 										<a  class='checked'>
 											<i class="fa fa-file-text-o" title="online" rel="tooltip-bottom"></i> 使用Java操作符<button type="button" class="btn btn-default btn-xs btn_position btn_slide_down"><i class="fa fa-chevron-down"></i></button>
@@ -106,6 +189,7 @@
 											</dl>
 										</div>
 									</li>
+								-->
 								</ul>
 							</div>
 						</div>

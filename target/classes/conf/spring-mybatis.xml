@@ -20,27 +20,35 @@
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 		
-		
-	<!-- dbcp配置 -->	
+	<!-- 数据库连接配置 -->
 	<bean id="dbcp" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-		<property name="url" value="jdbc:mysql:///yun_note?chatset=utf-8"/>
+		<property name="url" value="jdbc:mysql://127.0.0.1:3306/cloud_note?useUnicode=true&amp;characterEncoding=utf8"/>
 		<property name="username" value="root"/>
 		<property name="password" value="root"/>
 	</bean>
 	
-	<!-- SqlSessionFactoryBean配置 -->
+	<!-- 定义SqlSessionFactoryBean -->
 	<bean id="ssf" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<!-- dataSource配置 -->
+		<!-- 指定dataSource -->
 		<property name="dataSource" ref="dbcp"/>
-		<!-- mapper文件位置 -->
+		<!-- 指定SQL定义文件 -->
 		<property name="mapperLocations" value="classpath:mapper/*.xml"/>
 	</bean>
 	
-	<!-- MapperScannerConfigurer配置 -->
+	<!-- 定义MapperScannerConfigurer(Mapper扫描)
+			生成的Dao对象id为接口名，首字母小写
+	 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<!-- mapper接口所在位置 -->
-		<property name="basePackage" value="club.nextcoder.yunnote.dao"/>
-		<!-- SqlSessionFactoryBean默认注入 -->
+		<!-- 指定Mapper接口所在包-->
+		<property name="basePackage" value="org.tedu.cloudnote.dao"/>
+		<!-- 默认注入sqlSessionFactory，可以省略 -->
+		<!-- 指定sqlSessionFactory -->
+		<!--<property name="sqlSessionFactory" ref="ssf"/>-->
 	</bean>
+	
+	
+	
+	
+	
 </beans>

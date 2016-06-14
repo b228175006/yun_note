@@ -10,14 +10,13 @@ import org.tedu.cloudnote.util.NoteResult;
 
 @Controller
 @RequestMapping("/note")
-public class LoadNotesController {
+public class UpdateNoteController {
 	@Resource
-	NoteService noteService;
-	
-	@RequestMapping("/loadnotes")
+	private NoteService noteService;
+	@RequestMapping("/update")
 	@ResponseBody
-	public NoteResult execute(String bookId){
-		NoteResult result = noteService.loadBookNotes(bookId);
+	public NoteResult execute(String title,String body,String noteId){
+		NoteResult result = noteService.updateNote(title, body, noteId);
 		return result;
 	}
 }

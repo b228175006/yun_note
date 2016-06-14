@@ -10,14 +10,14 @@ import org.tedu.cloudnote.util.NoteResult;
 
 @Controller
 @RequestMapping("/book")
-public class LoadBooksController {
+public class RenameBookController {
 	@Resource
-	private BookService bookService;
+	BookService bookService;
 	
-	@RequestMapping("/loadbooks")
+	@RequestMapping("/rename")
 	@ResponseBody
-	public NoteResult execute(String userId){
-		NoteResult result = bookService.loadUserBooks(userId);
+	public NoteResult renameBook(String rename,String bookId,String userId){
+		NoteResult result = bookService.rename(rename, bookId,userId);
 		return result;
 	}
 }

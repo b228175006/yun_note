@@ -16,7 +16,7 @@ public class UserRegistController {
 	private UserService userService;
 	
 	//×¢²á¿ØÖÆÆ÷
-	@RequestMapping("/regist.do")
+	@RequestMapping("/regist")
 	@ResponseBody
 	public NoteResult execute(String name,String nick,String password){
 		NoteResult result = userService.registUser(name, nick, password);

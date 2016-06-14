@@ -14,7 +14,7 @@ public class UserLoginController {
 	
 	@Resource//×¢Èë
 	private UserService userService;
-	@RequestMapping("/login.do")
+	@RequestMapping("/login")
 	@ResponseBody
 	public NoteResult execute(String name,String password){
 		NoteResult result = userService.checkLogin(name, password);

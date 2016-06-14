@@ -20,6 +20,8 @@
 		<script type="text/javascript" src="scripts/jquery.min.js"></script>
 		<script type="text/javascript" src="scripts/cookie_util.js"></script>
 		<script type="text/javascript" src="scripts/book.js"></script>
+		<script type="text/javascript" src="scripts/note.js"></script>
+		<script type="text/javascript" src="scripts/alert.js"></script>
 		<script type="text/javascript">
 			//获取Cookie中的用户ID
 			var userId = getCookie("userId");
@@ -30,68 +32,25 @@
 					loadUserBooks();
 					//点击笔记本加载笔记列表(动态绑定)
 					//父元素.on(事件类型，子元素选择器，function);
-					$("#books").on("click","li",function(){
-						//获取点击的笔记本的li的Id值
-						var bookId = $(this).data("bookId");
-						//alert(bookId);
-						//发送请求加载笔记
-						$.ajax({
-							url:"http://localhost:8080/cloud_note/note/loadnotes.do",
-							type:"post",
-							data:{"bookId":bookId},
-							dataType:"json",
-							success:function(result){
-								if(result.status==0){//成功
-									var notes = result.data;
-									//清除之前的列表内容
-									$("#notes").empty();
-									//显示选中的笔记本中的笔记列表
-									for(var i=0;i<notes.length;i++){
-										var noteTitle = notes[i].cn_note_title;//笔记标题
-										var noteId = notes[i].cn_note_id;//笔记id
-										var li ='<li class="online">';
-									    li+='	<a>';
-										li+='		<i class="fa fa-file-text-o" title="online" rel="tooltip-bottom"></i>';
-										li+=		noteTitle;
-										li+='		<button type="button" class="btn btn-default btn-xs btn_position btn_slide_down">';
-										li+='			<i class="fa fa-chevron-down"></i>';
-										li+='		</button>';
-										li+='	</a>';
-										li+='	<div class="note_menu" tabindex="-1">';
-										li+='		<dl>';
-										li+='			<dt>';
-										li+='				<button type="button" class="btn btn-default btn-xs btn_move" title="移动至...">';
-										li+='					<i class="fa fa-random"></i>';
-										li+='				</button>';
-										li+='			</dt>';
-										li+='			<dt>'
-										li+='				<button type="button" class="btn btn-default btn-xs btn_share" title="分享">';
-										li+='					<i class="fa fa-sitemap"></i>';
-										li+='				</button>';
-										li+='			</dt>';
-										li+='			<dt>';
-										li+='				<button type="button" class="btn btn-default btn-xs btn_delete" title="删除">';
-										li+='					<i class="fa fa-times"></i>';
-										li+='				</button>';
-										li+='			</dt>';
-										li+='		</dl>';
-										li+='	</div>';
-										li+='</li>';
-										var $li = $(li);
-										//给li元素绑定id值
-										$li.data("noteId",noteId);
-										//添加到笔记列表的ul元素中
-										$("#notes").append($li);
-									}
-								}
-								
-								
-							},
-							error:function(){
-								alert("加载笔记列表失败");
-							}
-						});
-					});
+					$("#books").on("click","li",loadBookNotes);
+					//点击笔记加载笔记内容
+					$("#notes").on("click","li",loadNoteContent);
+					//点击保存笔记按钮更新笔记内容
+					$("#save_note").click(updateNote);
+					//关闭对话框
+					$("#can").on("click",".cancle,.close",closeAlertWindos);
+					//点击"+"按钮弹出创建笔记本对话框alertAddBookWindow
+					$("#add_notebook").click(alertAddBookWindow);
+					//新增笔记本
+					$("#can").on("click","#saveBook",saveBook);
+					//双击弹出重命名笔记本对话框
+					$("#books").on("dblclick","li",alertRename);
+					//提交笔记本重命名修改
+					$("#can").on("click","#rename",renameBook);
+					//点击弹出新增笔记对话框
+					$("#add_note").click(alertAddNoteWindow);
+					//新增笔记
+					$("#can").on("click","#saveNote",saveNote);
 				});
 			}else{
 				location.href="log_in.html";

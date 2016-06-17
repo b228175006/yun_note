@@ -1,0 +1,28 @@
+package org.tedu.cloudnote.controller.note;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.tedu.cloudnote.service.NoteService;
+import org.tedu.cloudnote.util.NoteResult;
+
+/**
+ * 移动笔记到其他笔记本
+ * @author Java
+ *
+ */
+@Controller
+@RequestMapping("/note")
+public class MoveNoteController {
+	@Resource
+	private NoteService noteService;
+	@RequestMapping("move")
+	@ResponseBody
+	public NoteResult execute(String bookId,String noteId){
+		NoteResult result = new NoteResult();
+		result = noteService.moveNote(noteId, bookId);
+		return result;
+	}
+}

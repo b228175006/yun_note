@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="org.tedu.cloudnote.dao.NoteDao">
+ 	<!-- 根据笔记本id查找 -->
+ 	<select id="findByBookId" parameterType="string" resultType="org.tedu.cloudnote.entity.Note">
+ 		SELECT * FROM cn_note WHERE cn_notebook_id=#{bookId} and cn_note_status_id='1'
+ 	</select>
+ 	<!-- 根据笔记id查找 -->
+ 	<select id="findByNoteId" parameterType="string" resultType="org.tedu.cloudnote.entity.Note">
+ 		SELECT * FROM cn_note WHERE cn_note_id=#{noteId}
+ 	</select>
+ 	<!-- 修改笔记内容，标题 -->
+ 	<update id="updateNote" parameterType="org.tedu.cloudnote.entity.Note">
+ 		UPDATE cn_note SET 
+ 		cn_note_title = #{cn_note_title},
+ 		cn_note_body = #{cn_note_body},
+ 		cn_note_last_modify_time = #{cn_note_last_modify_time} 
+ 		WHERE cn_note_id = #{cn_note_id}
+ 	</update>
+ 	<!-- 新增笔记 -->
+ 	<insert id="saveNote" parameterType="org.tedu.cloudnote.entity.Note">
+ 		INSERT INTO cn_note 
+ 		(cn_note_id,cn_notebook_id,cn_user_id,cn_note_status_id,cn_note_type_id,cn_note_title,cn_note_body,cn_note_create_time,cn_note_last_modify_time) 
+ 		VALUES 
+ 		(#{cn_note_id},#{cn_notebook_id},#{cn_user_id},#{cn_note_status_id},#{cn_note_type_id},#{cn_note_title},#{cn_note_body},#{cn_note_create_time},#{cn_note_last_modify_time})
+ 	</insert>
+ 	<!-- 修改笔记状态 -->
+ 	<update id="updateStatus" parameterType="map">
+ 		UPDATE cn_note SET cn_note_status_id = #{statusId} WHERE cn_note_id = #{noteId}
+ 	</update>
+ 	<!-- 修改所属笔记本 -->
+ 	<update id="updateBookId" parameterType="map">
+ 		UPDATE cn_note SET cn_notebook_id = #{bookId} WHERE cn_note_id = #{noteId}
+ 	</update>
+ 	<!-- 查找回收站笔记 -->
+ 	<select id="findByRecycle" parameterType="string" resultType="org.tedu.cloudnote.entity.Note">
+ 		SELECT * FROM cn_note WHERE cn_user_id=#{userId} and cn_note_status_id='2'
+ 	</select>
+ </mapper>

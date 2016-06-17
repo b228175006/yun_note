@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="org.tedu.cloudnote.dao.ShareDao">
+ 	<!-- 根据笔记Id查询 -->
+ 	<select id="findByNoteId" parameterType="string" resultType="org.tedu.cloudnote.entity.Share">
+ 		SELECT * FROM cn_share WHERE cn_note_id = #{noteId}
+ 	</select>
+ 	<!-- 根据笔记名称模糊查询 -->
+ 	<select id="search" parameterType="string" resultType="org.tedu.cloudnote.entity.Share">
+ 		SELECT cn_share_id,cn_share_title FROM cn_share WHERE cn_share_title like #{title}
+ 	</select>
+ 	<!-- 根据分享Id查询 -->
+ 	<select id="findByShareId" parameterType="string" resultType="org.tedu.cloudnote.entity.Share">
+ 		SELECT cn_share_id,cn_share_title,cn_share_body,cn_note_id FROM cn_share WHERE cn_share_id = #{shareId}
+ 	</select>
+ 	<!-- 新增分享 -->
+ 	<insert id="saveShare" parameterType="org.tedu.cloudnote.entity.Share">
+ 		INSERT INTO cn_share 
+ 		(cn_share_id,cn_share_title,cn_share_body,cn_note_id) 
+ 		VALUES 
+ 		(#{cn_share_id},#{cn_share_title},#{cn_share_body},#{cn_note_id})
+ 	</insert>
+ 	<!-- 修改内容,根据笔记Id查找 -->
+ 	<update id="updateShare" parameterType="org.tedu.cloudnote.entity.Share">
+ 		UPDATE cn_share SET cn_share_title = #{cn_share_title},cn_share_body = #{cn_share_body} 
+ 		WHERE cn_share_id = #{cn_share_id}
+ 	</update>
+ </mapper>

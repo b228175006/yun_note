@@ -1,0 +1,18 @@
+function saveShare(){
+	//获取笔记Id
+	//var noteId = $(this).parents("li").data("noteId");
+	var noteId = $("#notes .checked").parent().data("noteId");
+	//发送ajax请求
+	$.ajax({
+		url:"http://localhost:8080/cloud_note/share/share.do",
+		type:"post",
+		data:{"noteId":noteId},
+		dataType:"json",
+		success:function(result){
+				alert(result.msg);
+		},
+		error:function(){
+			alert("分享笔记失败");
+		}
+	});
+}

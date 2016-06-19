@@ -1,0 +1,42 @@
+package org.tedu.cloudnote.service;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.tedu.cloudnote.dao.NoteDao;
+import org.tedu.cloudnote.dao.ShareDao;
+import org.tedu.cloudnote.entity.Note;
+import org.tedu.cloudnote.entity.Share;
+import org.tedu.cloudnote.util.NoteResult;
+import org.tedu.cloudnote.util.NoteUtil;
+
+
+@Service("shareService")
+public class ShareServiceImpl implements ShareService {
+	@Resource
+	private ShareDao shareDao;
+	@Resource
+	private NoteDao noteDao;
+	/** 
+	 * 根据笔记Id，从笔记表查询笔记并插入到分享表中
+	 */
+	public NoteResult shareNote(String noteId) {
+		NoteResult result = new NoteResult();
+		//TODO 查询分享Id，查看笔记是否已经分享
+		
+		//根据笔记Id，查询笔记
+		Note note = noteDao.findByNoteId(noteId);
+		//新建Share实体类对象
+		Share share = new Share();
+		share.setCn_share_id(NoteUtil.createId());//设置分享Id
+		share.setCn_note_id(noteId);//设置笔记Id
+		share.setCn_share_title(note.getCn_note_title());//设置分享标题
+		share.setCn_share_body(note.getCn_note_body());//设置分享内容
+		//保存分享
+		shareDao.saveShare(share);
+		result.setStatus(0);
+		result.setMsg("笔记分享成功");
+		return result;
+	}
+
+}

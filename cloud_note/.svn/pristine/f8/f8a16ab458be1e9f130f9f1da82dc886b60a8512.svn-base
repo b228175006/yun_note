@@ -1,0 +1,12 @@
+package org.tedu.cloudnote.service;
+
+import org.tedu.cloudnote.util.NoteResult;
+
+public interface ShareService {
+	/**
+	 * 新增分享
+	 * @param noteId 笔记Id
+	 * @return
+	 */
+	public NoteResult shareNote(String noteId);
+}
